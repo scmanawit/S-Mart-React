@@ -15,6 +15,9 @@ import Logo from "../components/Logo";
 import {green} from "@mui/material/colors";
 import Header from "../components/Header";
 import Footer from "../components/Footer.jsx";
+import axios from 'axios'
+import Swal from 'sweetalert2'
+
 
 function Copyright(props) {
     return (
@@ -29,14 +32,55 @@ function Copyright(props) {
     );
 }
 
+function register({name, email, password}){
+
+    axios.post('http://localhost:4000/register', {
+        name,
+        email,
+        password
+    }).then(response => {
+        console.log('DEBUG response', response);
+
+    }).catch(error => {
+        console.log('DEBUG error', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'Register unsuccessful',
+            icon: 'error',
+          })
+    })
+}
+
 export default function Register() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
+            name: data.get('name'),
             email: data.get('email'),
             password: data.get('password'),
+            
         });
+        if (data.get('password') === data.get('confirmpassword')) {
+            register({
+                name: data.get('name'),
+                email: data.get('email'),
+                password: data.get('password'),
+            })
+
+            Swal.fire({
+                title: "Authentication Successful!",
+                icon: "success",
+                text: "Welcome to S-Mart"
+            })
+        }else{
+            Swal.fire({
+                title: 'Error!',
+                text: 'Register unsuccessful',
+                icon: 'error',
+              })
+        }
+        
     };
 
     return (
@@ -84,6 +128,7 @@ export default function Register() {
                                     id="email"
                                     label="Email Address"
                                     name="email"
+                                    type="email"
                                     autoComplete="email"
                                     autoFocus
                                 />
@@ -101,11 +146,11 @@ export default function Register() {
                                     margin="normal"
                                     required
                                     fullWidth
-                                    name="confirm password"
+                                    name="confirmpassword"
                                     label="confirm Password"
                                     type="password"
-                                    id="confirm password"
-                                    autoComplete="current-password"
+                                    id="confirmPassword"
+                                    autoComplete="confirm-password"
                                 />
 
                                 <Button
