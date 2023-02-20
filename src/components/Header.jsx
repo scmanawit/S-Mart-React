@@ -8,6 +8,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 // import NotificationsIcon from '@mui/icons-material/Notifications';
 import CartIcon from '@mui/icons-material/ShoppingCart';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import { useNavigate } from 'react-router-dom';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -50,6 +51,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
+
+    const navigate = useNavigate()
+
+    const routeChange = () =>{ 
+        let path = `/login`; 
+        navigate(path);
+      }
+
+
+
     return (
         <AppBar
             elevation={0}
@@ -87,6 +98,7 @@ export default function Header() {
                         aria-label="account of current user"
                         aria-haspopup="true"
                         color="inherit"
+                        onClick={routeChange}
                     >
                         <AccountCircle />
                     </IconButton>
