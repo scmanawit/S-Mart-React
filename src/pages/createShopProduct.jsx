@@ -102,7 +102,7 @@ export default function AddProduct() {
         const data = new FormData(event.currentTarget);
         console.log({
             productName: data.get('productName'),
-            descrition: data.get('description'),
+            description: data.get('description'),
             price: data.get('price'),
             categories: data.get('categories'),
             stocks: data.get('stocks')
@@ -111,7 +111,7 @@ export default function AddProduct() {
 
         addProduct({
             productName: data.get('productName'),
-            descrition: data.get('description'),
+            description: data.get('description'),
             price: parseInt(data.get('price')),
             categories: data.get('categories'),
             stocks: parseInt(data.get('stocks'))
