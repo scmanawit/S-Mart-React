@@ -50,7 +50,12 @@ export default function CreateShop() {
         axios.post('http://localhost:4000/shop/register', {
             shopName,
             description
-        }).then(response => {
+        },{
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        .then(response => {
             console.log('DEBUG response', response);
 
             Swal.fire({
@@ -76,19 +81,10 @@ export default function CreateShop() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            shopName: data.get('shopName'),
-            descrition: data.get('description'),
-        });
-
         createShop({
-            shopName: data.get('shopName'),
-            descrition: data.get('description'),
+            shopName: shopName,
+            description: shopDescription,
         })
-
-
-
     };
 
     return (
