@@ -5,6 +5,7 @@ import Register from "./pages/register";
 import { UserProvider } from './UserContext';
 import CreateShop from "./pages/createShop.jsx";
 import AddProduct from "./pages/createShopProduct";
+import RegisterAdmin from "./pages/registerAdmin.jsx";
 
 const router = createBrowserRouter(
     [
@@ -33,6 +34,10 @@ const router = createBrowserRouter(
     {
         path: "/product/:shopId/",
         element: <AddProduct/>
+    },
+    {
+        path: "/register/admin",
+        element: <RegisterAdmin/>
     }
 
 ])
