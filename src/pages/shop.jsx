@@ -1,9 +1,11 @@
-import {Box, Button, Modal, Toolbar, Typography} from "@mui/material";
-import {useEffect, useState} from "react";
+import { Box, Button, Modal, Toolbar, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import CreateShopForm from "../components/form/CreateShopForm";
-import {useOutletContext} from "react-router-dom";
-import {getMyShops} from "../services/shopService.js";
+import { useOutletContext } from "react-router-dom";
+import { getMyShops } from "../services/shopService.js";
 import ShopsList from "../components/ShopsList.jsx";
+import ShopContext from "../context/ShopContext";
+import CreateProductForm from "../components/form/CreateProductForm";
 const style = {
     position: 'absolute',
     top: '50%',
@@ -17,11 +19,14 @@ const style = {
 };
 export default function Shop() {
 
-    const [open, setOpen] = useState(false);
+    const [openShopForm, setOpenShopForm] = useState(false);
+    const [openProductForm, setOpenProductForm] = useState(false);
+
     const [shops, setShops] = useState([]);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
     const context = useOutletContext()
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedShop, setSelectedShop] = useState(null);
+
 
     useEffect(() => {
         getMyShops()
@@ -39,17 +44,44 @@ export default function Shop() {
                     setShops(shops)
                 })
         }
-        handleClose()
+        setOpenShopForm(false)
     }
 
+    const getShops = () => {
+        getMyShops()
+            .then(shops => {
+                setShops(shops)
+            })
+    }
+
+    const handleClose = () => {
+        setSelectedProduct(null)
+        setOpenProductForm(false)
+    };
+
     return (
-        <Box component='div' sx={{...context.sx}}>
-            <Toolbar />
-            <Button onClick={handleOpen}>Create Your Own Shop</Button>
-            <CreateShopForm open={open} handleClose={closeModal} />
-            <Box component='div' sx={{padding: '20px'}}>
-                <ShopsList shops={shops} />
+        <ShopContext.Provider value={{
+            shops,
+            getShops,
+            selectedShop,
+            setSelectedProduct,
+            selectedProduct,
+            setSelectedShop,
+            openShopForm,
+            setOpenProductForm: () => (setOpenProductForm(true)),
+            openProductForm,
+            setOpenShopForm: () => (setOpenShopForm(true)),
+        }}>
+            <Box component='div' sx={{ ...context.sx }}>
+                <Toolbar />
+                <Button onClick={() => setOpenShopForm(true)}>Create Your Own Shop</Button>
+                <Box component='div' sx={{ padding: '20px' }}>
+                    <ShopsList shops={shops} />
+                </Box>
             </Box>
-        </Box>
+
+            <CreateShopForm open={openShopForm} handleClose={closeModal} />
+            <CreateProductForm open={openProductForm} handleClose={handleClose} />
+        </ShopContext.Provider>
     )
 }

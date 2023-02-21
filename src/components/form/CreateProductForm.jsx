@@ -3,20 +3,21 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import * as React from "react";
-import {useEffect, useState} from "react";
+import { useEffect, useState, useContext } from "react";
 import Swal from "sweetalert2";
-import {createShopProduct} from "../../services/productService.js";
-import {Modal} from "@mui/material";
+import { createShopProduct, updateShopProduct } from "../../services/productService.js";
+import { Modal } from "@mui/material";
+import ShopContext from "../../context/ShopContext.jsx";
 
-export default function CreateProductForm({ shop, open, handleClose }) {
-    const [productName, setProductName] = useState('');
+export default function CreateProductForm({ open, handleClose }) {
+    const { selectedProduct, getShops, selectedShop } = useContext(ShopContext);
 
-    const [description, setDescription] = useState('');
-    const [price, setPrice] = useState('');
-    const [categories, setCategories] = useState('');
-    const [stocks, setStocks] = useState('');
-    const [image, setImage] = useState(null);
-
+    const [productName, setProductName] = useState(selectedProduct?.productName || '');
+    const [description, setDescription] = useState(selectedProduct?.description || '');
+    const [price, setPrice] = useState(selectedProduct?.price || '');
+    const [categories, setCategories] = useState(selectedProduct?.categories || '');
+    const [stocks, setStocks] = useState(selectedProduct?.stocks || '');
+    const [image, setImage] = useState('');
     const [isActive, setIsActive] = useState(false);
 
     useEffect(() => {
@@ -25,32 +26,63 @@ export default function CreateProductForm({ shop, open, handleClose }) {
         } else {
             setIsActive(false);
         }
-    }, [productName,
+    }, [
+        productName,
         description,
         price,
         categories,
-        stocks])
+        stocks,
+        image
+    ])
+
+    useEffect(() => {
+        resetForm()
+    }, [selectedProduct])
+
+    const resetForm = () => {
+        setProductName(selectedProduct?.productName || '')
+        setDescription(selectedProduct?.description || '')
+        setPrice(selectedProduct?.price || '')
+        setCategories(selectedProduct?.categories || '')
+        setStocks(selectedProduct?.stocks || '')
+        setImage(selectedProduct?.image || '')
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await createShopProduct({
-                shopId: shop._id,
-                productName,
-                description,
-                price,
-                categories,
-                stocks,
-                image
-            })
+            if (selectedProduct) {
+                await updateShopProduct({
+                    productId: selectedProduct._id,
+                    productName,
+                    description,
+                    price,
+                    categories,
+                    stocks,
+                    image: image || undefined
+                })
+            } else {
+                await createShopProduct({
+                    shopId: selectedShop._id,
+                    productName,
+                    description,
+                    price,
+                    categories,
+                    stocks,
+                    image: image || undefined
+                })
+            }
 
-            handleClose({created: true})
+            await getShops()
+
+            handleClose({ created: true })
 
             await Swal.fire({
-                title: "Shop Successfully Created!",
-                icon: "success",
-                text: "Kindly wait for admin to verify your shop"
+                title: "Product Successfully Saved!",
+                icon: "success"
             })
+
+            resetForm()
 
         } catch (e) {
             handleClose()
@@ -68,22 +100,22 @@ export default function CreateProductForm({ shop, open, handleClose }) {
             onClose={handleClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
-            sx={{width: '400px', margin: 'auto', mt: '20px', height: '800px', overflow: 'auto'}}
+            sx={{ width: { md: '400px', xs: 'calc(100vw - 20px)' }, margin: 'auto', mt: '20px', height: 'calc(100vh - 50px)', overflow: 'auto' }}
         >
-            <Box component='div' sx={{p: '80px 20px', bgcolor: 'white'}}>
+            <Box component='div' sx={{ p: '80px 20px', bgcolor: 'white' }}>
 
-                <Typography component="h1" variant="h5" sx={{textAlign: 'center', m: 1}}>
-                    Add Product to Your Shop
+                <Typography component="h1" variant="h5" sx={{ textAlign: 'center', m: 1 }}>
+                    Product
                 </Typography>
                 <Box
                     component="form"
                     onSubmit={handleSubmit}
-                    noValidate sx={{mt: 1, bgcolor: "white", p: '20px',}}
+                    noValidate sx={{ mt: 1, bgcolor: "white", p: '20px', }}
                 >
                     <TextField
                         margin="normal"
                         required
-                        sx={{width: '100%'}}
+                        sx={{ width: '100%' }}
                         id="productName"
                         label="Product Name"
                         name="productName"
@@ -94,7 +126,7 @@ export default function CreateProductForm({ shop, open, handleClose }) {
                     <TextField
                         margin="normal"
                         required
-                        sx={{width: '100%'}}
+                        sx={{ width: '100%' }}
                         id="description"
                         label="description"
                         name="description"
@@ -105,7 +137,7 @@ export default function CreateProductForm({ shop, open, handleClose }) {
                     <TextField
                         margin="normal"
                         required
-                        sx={{width: '100%'}}
+                        sx={{ width: '100%' }}
                         id="price"
                         label="price"
                         name="price"
@@ -117,7 +149,7 @@ export default function CreateProductForm({ shop, open, handleClose }) {
                     <TextField
                         margin="normal"
                         required
-                        sx={{width: '100%'}}
+                        sx={{ width: '100%' }}
                         id="categories"
                         label="categories"
                         name="categories"
@@ -128,7 +160,7 @@ export default function CreateProductForm({ shop, open, handleClose }) {
                     <TextField
                         margin="normal"
                         required
-                        sx={{width: '100%'}}
+                        sx={{ width: '100%' }}
                         id="stocks"
                         label="stocks"
                         type="number"
@@ -137,27 +169,35 @@ export default function CreateProductForm({ shop, open, handleClose }) {
                         value={stocks}
                         onChange={event => setStocks(event.target.value)}
                     />
-                    {/* <TextField
+                    <TextField
                         margin="normal"
                         required
-                        sx={{width: '100%'}}
+                        sx={{ width: '100%' }}
                         id="image"
                         label="image"
+                        type="text"
                         name="image"
                         autoFocus
                         value={image}
-                        onChange={event => setImage(event.target.value)}
-                    /> */}
+                        onChange={event => (setImage(event.target.value))}
+                    />
 
 
                     <Button type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{mt: 8, mb: 2}}
-                            disabled={!isActive}>
-                        Add Product
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 8 }}
+                        disabled={!isActive}>
+                        Save Product
                     </Button>
-
+                    <Button type="button"
+                        fullWidth
+                        variant="contained"
+                        onClick={handleClose}
+                        sx={{ mt: 1, mb: 2, background: theme => theme.palette.grey['600'] }}
+                    >
+                        Close
+                    </Button>
                 </Box>
             </Box>
         </Modal>

@@ -1,28 +1,26 @@
-import * as React from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Button } from "@mui/material";
-import { useState } from "react";
-import CreateProductForm from "./form/CreateProductForm";
+import { useContext, useState } from "react";
 import ProductsList from './ProductsList';
+import ShopContext from '../context/ShopContext';
 
-export default function ShopsList({ shops }) {
-    const [expanded, setExpanded] = React.useState(false);
-    const [selectedShop, setSelectedShop] = React.useState(null);
+export default function ShopsList() {
+    const { setSelectedShop, shops, setOpenProductForm } = useContext(ShopContext);
 
-    const [open, setOpen] = useState(false);
-    const handleOpen = (shop) => {
-        setSelectedShop(shop)
-        setOpen(true)
-    };
-    const handleClose = () => setOpen(false);
+    const [expanded, setExpanded] = useState(false);
 
     const handleChange = (shop) => (event, isExpanded) => {
-        setExpanded(isExpanded ? shop._id : false);
+        setExpanded(isExpanded ? shop._id : false)
         setSelectedShop(shop)
+    };
+
+    const handleOpen = (shop) => {
+        setSelectedShop(shop)
+        setOpenProductForm(true)
     };
 
     const accordion = () => {
@@ -50,7 +48,6 @@ export default function ShopsList({ shops }) {
 
     return (
         <div>
-            <CreateProductForm shop={selectedShop} open={open} handleClose={handleClose} />
             {accordion()}
         </div>
     );

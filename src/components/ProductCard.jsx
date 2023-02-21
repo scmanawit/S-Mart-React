@@ -1,27 +1,63 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
+import { useContext } from "react";
+import Swal from "sweetalert2";
+import ShopContext from "../context/ShopContext";
+import { activateShopProduct, deleteShopProduct } from "../services/productService";
 
 export default function ProductCard({ product }) {
+    const {setSelectedProduct, setOpenProductForm, getShops } = useContext(ShopContext);
+
+    const update = async (product) => {
+        setSelectedProduct(product)
+        setOpenProductForm(true)
+    }
+
+    const toggleActivate = async (product) => {
+        try {
+            if (product.deletedAt) {
+                await activateShopProduct(product._id)
+            } else {
+                await deleteShopProduct(product._id)
+            }
+
+            await Swal.fire({
+                title: "Product Successfully Updated!",
+                icon: "success"
+            })
+        } catch (e) {
+            await Swal.fire({
+                title: 'Error!',
+                text: e.message,
+                icon: 'error',
+            })
+        }
+
+        await getShops()
+    }
+
     return (
-        <Card sx={{ maxWidth: 345 }}>
+        <Card>
             <CardMedia
-                sx={{ height: 140 }}
-                image="/static/images/cards/contemplative-reptile.jpg"
-                title="green iguana"
+                sx={{ height: '350px', width: '300px' }}
+                image={product.image}
+                title={product.productName}
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                     {product.productName}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    Lizards are a widespread group of squamate reptiles, with over 6,000
-                    species, ranging across all continents except Antarctica
+                    {product.description}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {product.price} PHP
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small">Update</Button>
-                <Button size="small" sx={{
+                {!product.deletedAt && <Button onClick={() => (update(product))} size="small">Update</Button>}
+                <Button onClick={() => (toggleActivate(product))} size="small" sx={{
                     color: theme => theme.palette.error.main
-                }}>Remove</Button>
+                }}>{product.deletedAt ? 'Activate' : 'Deactivate'}</Button>
             </CardActions>
         </Card>
     )
