@@ -12,7 +12,7 @@ export default function ActiveProducts() {
     const context = useOutletContext()
 
   return (
-    <ImageList sx={{ ...context.sx, width: 1000, height: 900   }} >
+    <ImageList sx={{ ...context.sx, width: '100vh', height: 900   }} >
       <ImageListItem key="Subheader" cols={2}>
         <ListSubheader component="div">December</ListSubheader>
       </ImageListItem>

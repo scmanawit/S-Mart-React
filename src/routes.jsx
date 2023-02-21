@@ -8,7 +8,7 @@ import UnathenticatedUserRoute from "./middleware/UnathenticatedUserRoute";
 import Profile from "./pages/profile";
 import Shop from "./pages/shop.jsx";
 import OrderHistory from "./pages/orderHistory.jsx";
-import ActiveProducts from "./pages/ActiveProducts.jsx";
+import Catalog from "./pages/catalog.jsx";
 
 
 const router = createBrowserRouter([
@@ -21,6 +21,10 @@ const router = createBrowserRouter([
         ),
         children: [
             {
+                path: "/",
+                element: <Catalog />
+            },
+            {
                 path: "user/profile",
                 element: <Profile/>
             },
@@ -31,10 +35,6 @@ const router = createBrowserRouter([
             {
                 path: "user/orderHistory",
                 element: <OrderHistory/>
-            },
-            {
-                path: "product/",
-                element: <ActiveProducts/>
             }
         ]
     },

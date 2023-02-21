@@ -13,6 +13,7 @@ const ShopContext = createContext({
     openShopForm: false,
     setOpenProductForm: false,
     setOpenShopForm: false,
+    categories: []
 });
 
 export default ShopContext;

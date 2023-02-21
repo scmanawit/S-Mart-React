@@ -8,20 +8,21 @@ import Swal from "sweetalert2";
 import { createShopProduct, updateShopProduct } from "../../services/productService.js";
 import { Modal } from "@mui/material";
 import ShopContext from "../../context/ShopContext.jsx";
+import SelectInput from "../input/SelectInput.jsx";
 
 export default function CreateProductForm({ open, handleClose }) {
-    const { selectedProduct, getShops, selectedShop } = useContext(ShopContext);
+    const { selectedProduct, getShops, selectedShop, categories } = useContext(ShopContext);
 
     const [productName, setProductName] = useState(selectedProduct?.productName || '');
     const [description, setDescription] = useState(selectedProduct?.description || '');
     const [price, setPrice] = useState(selectedProduct?.price || '');
-    const [categories, setCategories] = useState(selectedProduct?.categories || '');
+    const [formCategories, setFormCategories] = useState(selectedProduct?.categories || []);
     const [stocks, setStocks] = useState(selectedProduct?.stocks || '');
     const [image, setImage] = useState('');
     const [isActive, setIsActive] = useState(false);
 
     useEffect(() => {
-        if (productName !== "" && description !== "" && price !== "" && categories !== "" && stocks !== "") {
+        if (productName !== "" && description !== "" && price !== "" && formCategories !== "" && stocks !== "") {
             setIsActive(true);
         } else {
             setIsActive(false);
@@ -30,7 +31,7 @@ export default function CreateProductForm({ open, handleClose }) {
         productName,
         description,
         price,
-        categories,
+        formCategories,
         stocks,
         image
     ])
@@ -43,7 +44,7 @@ export default function CreateProductForm({ open, handleClose }) {
         setProductName(selectedProduct?.productName || '')
         setDescription(selectedProduct?.description || '')
         setPrice(selectedProduct?.price || '')
-        setCategories(selectedProduct?.categories || '')
+        setFormCategories(selectedProduct?.categories || [])
         setStocks(selectedProduct?.stocks || '')
         setImage(selectedProduct?.image || '')
     }
@@ -57,7 +58,7 @@ export default function CreateProductForm({ open, handleClose }) {
                     productName,
                     description,
                     price,
-                    categories,
+                    categories: formCategories,
                     stocks,
                     image: image || undefined
                 })
@@ -67,7 +68,7 @@ export default function CreateProductForm({ open, handleClose }) {
                     productName,
                     description,
                     price,
-                    categories,
+                    categories: formCategories,
                     stocks,
                     image: image || undefined
                 })
@@ -146,7 +147,7 @@ export default function CreateProductForm({ open, handleClose }) {
                         value={price}
                         onChange={event => setPrice(event.target.value)}
                     />
-                    <TextField
+                    {/* <TextField
                         margin="normal"
                         required
                         sx={{ width: '100%' }}
@@ -154,8 +155,15 @@ export default function CreateProductForm({ open, handleClose }) {
                         label="categories"
                         name="categories"
                         autoFocus
-                        value={categories}
-                        onChange={event => setCategories(event.target.value)}
+                        value={formCategories}
+                        onChange={event => setFormCategories(event.target.value)}
+                    /> */}
+                    <SelectInput
+                        id="categories"
+                        label="categories"
+                        value={formCategories}
+                        onChange={event => setFormCategories(event.target.value)}
+                        items={categories.map(c => ({text: c, value: c}))}
                     />
                     <TextField
                         margin="normal"

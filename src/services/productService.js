@@ -47,3 +47,12 @@ export async function activateShopProduct(productId) {
         throw new Error(e?.response?.data || e?.message || 'Something went wrong!')
     }
 }
+
+export async function getProductCategories() {
+    try {
+        const response = await client().get(`/product/categories`)
+        return response.data
+    } catch (e) {
+        throw new Error(e?.response?.data || e?.message || 'Something went wrong!')
+    }
+}

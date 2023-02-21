@@ -16,6 +16,15 @@ export default function UpdateProfileForm() {
 
     const [isActive, setIsActive] = useState(false);
 
+    useEffect(() => {
+        if (email !== "" && name !== "") {
+            setIsActive(true);
+        } else {
+            setIsActive(false);
+        }
+
+    }, [email, name])
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -42,6 +51,7 @@ export default function UpdateProfileForm() {
                 autoComplete="name"
                 autoFocus
                 value={name}
+                disabled
                 onChange={event => setName(event.target.value)}
             />
             <TextField
@@ -55,23 +65,24 @@ export default function UpdateProfileForm() {
                 autoComplete="email"
                 autoFocus
                 value={email}
+                disabled
                 onChange={event => setEmail(event.target.value)}
 
             />
 
-            <PasswordInput
+            {/* <PasswordInput
                 id='password'
                 value={password}
                 onChange={event => setPassword(event.target.value)}
-            />
+            /> */}
 
-            <Button type="submit"
+            {/* <Button type="submit"
                     fullWidth
                     variant="contained"
                     sx={{mt: 8, mb: 2}}
                     disabled={!isActive}>
                 Update Profile
-            </Button>
+            </Button> */}
         </Box>
     )
 }

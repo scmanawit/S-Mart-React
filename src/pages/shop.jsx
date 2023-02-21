@@ -6,6 +6,7 @@ import { getMyShops } from "../services/shopService.js";
 import ShopsList from "../components/ShopsList.jsx";
 import ShopContext from "../context/ShopContext";
 import CreateProductForm from "../components/form/CreateProductForm";
+import { getProductCategories } from "../services/productService";
 const style = {
     position: 'absolute',
     top: '50%',
@@ -23,6 +24,7 @@ export default function Shop() {
     const [openProductForm, setOpenProductForm] = useState(false);
 
     const [shops, setShops] = useState([]);
+    const [categories, setCategories] = useState([]);
     const context = useOutletContext()
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [selectedShop, setSelectedShop] = useState(null);
@@ -31,16 +33,20 @@ export default function Shop() {
     useEffect(() => {
         getMyShops()
             .then(shops => {
-                console.log('DEBUG: shops', shops)
                 setShops(shops)
             })
+        
+        getProductCategories()
+            .then(categories => {
+                setCategories(categories)
+            })
+            
     }, [])
 
     const closeModal = (data) => {
         if (data?.created) {
             getMyShops()
                 .then(shops => {
-                    console.log('DEBUG: shops', shops)
                     setShops(shops)
                 })
         }
@@ -72,6 +78,7 @@ export default function Shop() {
             setOpenProductForm: () => (setOpenProductForm(true)),
             openProductForm,
             setOpenShopForm: () => (setOpenShopForm(true)),
+            categories
         }}>
             <Box component='div' sx={{ ...context.sx }}>
                 <Toolbar />
