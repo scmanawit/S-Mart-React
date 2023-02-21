@@ -27,6 +27,15 @@ export async function getMyShops() {
     }
 }
 
+export async function getUnverifiedShops() {
+    try {
+        const response = await client().get('/shop/all?')
+        return response.data
+    } catch (e) {
+        throw new Error(e?.response?.data || e?.message || 'Something went wrong!')
+    }
+}
+
 export async function deleteShop(shopId) {
     try {
         const response = await client().delete(`/shop/delete/${shopId}`)

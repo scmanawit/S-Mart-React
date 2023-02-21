@@ -26,16 +26,15 @@ export default function SelectInput({ value, onChange, id = 'select', label = 'S
             width: '100%',
             mt: 1
         }}>
-            <InputLabel id="demo-select-small">{label}</InputLabel>
+            <InputLabel id={`${id}-label`}>{label}</InputLabel>
             <Select
                 sx={{
                     width: '100%'
                 }}
                 multiple
-                labelId={id}
+                labelId={`${id}-label`}
                 id={id}
                 value={value}
-                label={label}
                 onChange={onChange}
                 MenuProps={MenuProps}
                 input={<OutlinedInput label="Tag" />}

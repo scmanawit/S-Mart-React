@@ -1,23 +1,16 @@
-import {useEffect, useState} from "react";
-import SideNav from "../components/SideNav";
-import { profile } from "../services/userService";
+import Box from "@mui/material/Box";
+import AdminHeader from "../components/AdminNavbar";
+import UserList from "../components/UserList";
+import {Toolbar} from "@mui/material";
 
-function AdminHome() {
-    // useEffect(() => {
-    //     profile().catch(e => null)
-    // }, [])
 
-    const [mobileOpen, setMobileOpen] = useState(false);
-
-    const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
-    };
-
+export default function AdminHome() {
     return (
-        <div className="App">
-            <SideNav open={mobileOpen} toggle={handleDrawerToggle} />
-        </div>
+        <Box component='div'>
+            <AdminHeader />
+            <Toolbar/>
+            <UserList/>
+
+        </Box>
     )
 }
-
-export default AdminHome
