@@ -29,7 +29,7 @@ export async function getMyShops() {
 
 export async function getUnverifiedShops() {
     try {
-        const response = await client().get('/shop/all?')
+        const response = await client().get('/shop/unverified')
         return response.data
     } catch (e) {
         throw new Error(e?.response?.data || e?.message || 'Something went wrong!')
@@ -48,6 +48,15 @@ export async function deleteShop(shopId) {
 export async function activateShop(shopId) {
     try {
         const response = await client().put(`/shop/activate/${shopId}`)
+        return response.data
+    } catch (e) {
+        throw new Error(e?.response?.data || e?.message || 'Something went wrong!')
+    }
+}
+
+export async function verifyShop(shopId) {
+    try {
+        const response = await client().put(`/shop/verify/${shopId}`)
         return response.data
     } catch (e) {
         throw new Error(e?.response?.data || e?.message || 'Something went wrong!')

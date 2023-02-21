@@ -37,3 +37,18 @@ export async function register({email, name, password}) {
 export function logout() {
     localStorage.clear()
 }
+
+export async function createAdmin({name, email, password}){
+    try {
+        const response = await client().post('/register/admin', {
+            name,
+            email,
+            password,
+            
+        })
+
+        return response?.data
+    } catch (e) {
+        throw new Error(e?.response?.data || e?.message || 'Something went wrong!')
+    }
+}

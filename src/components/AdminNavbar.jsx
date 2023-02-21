@@ -1,4 +1,4 @@
-import {ReactElement, useState} from 'react'
+import { ReactElement, useState } from 'react'
 import {
     Toolbar,
     IconButton,
@@ -10,19 +10,20 @@ import {
     InputBase,
     Box,
     Badge,
-    Menu, MenuItem
+    Menu, MenuItem, Button, Modal
 } from '@mui/material'
 import Logo from "./Logo";
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import CartIcon from '@mui/icons-material/ShoppingCart';
 import MenuIcon from '@mui/icons-material/Menu';
-import {useNavigate} from 'react-router-dom';
-import {logout} from "../services/authService.js";
-import {getLoggedInUser} from "../services/userService.js";
+import { useNavigate } from 'react-router-dom';
+import { logout } from "../services/authService.js";
+import { getLoggedInUser } from "../services/userService.js";
+import CreateAdminForm from './form/CreateAdminForm';
 
 
-const Search = styled('div')(({theme}) => ({
+const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -38,7 +39,7 @@ const Search = styled('div')(({theme}) => ({
     },
 }));
 
-const SearchIconWrapper = styled('div')(({theme}) => ({
+const SearchIconWrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
@@ -48,7 +49,7 @@ const SearchIconWrapper = styled('div')(({theme}) => ({
     justifyContent: 'center',
 }));
 
-const StyledInputBase = styled(InputBase)(({theme}) => ({
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
     '& .MuiInputBase-root': {
         width: '100%',
@@ -61,7 +62,20 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     },
 }));
 
-export default function AdminHeader({toggleDrawer}) {
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
+
+
+export default function AdminHeader({ toggleDrawer }) {
 
     const navigate = useNavigate()
 
@@ -96,19 +110,23 @@ export default function AdminHeader({toggleDrawer}) {
         navigate('/auth/login')
     }
 
+    const handleOpen = () => setOpen(true);
+    const handleClos = () => setOpen(false);
+    const [open, setOpen] = useState(false)
+
     return (
         <AppBar
             elevation={0}
             position='fixed'
             sx={{
-                    width: `100%`,
-                    zIndex: (theme) => theme.zIndex.drawer + 1
-                }}
+                width: `100%`,
+                zIndex: (theme) => theme.zIndex.drawer + 1
+            }}
         >
-            <Toolbar sx={{justifyContent: {xs: 'space-between', md: 'start'}}}>
+            <Toolbar sx={{ justifyContent: { xs: 'space-between', md: 'start' } }}>
                 <IconButton
                     sx={{
-                        display: {xs: 'inline-flex', md: 'none'}
+                        display: { xs: 'inline-flex', md: 'none' }
                     }}
                     size="large"
                     edge="end"
@@ -117,23 +135,33 @@ export default function AdminHeader({toggleDrawer}) {
                     color="inherit"
                     onClick={toggleDrawer}
                 >
-                    <MenuIcon/>
+                    <MenuIcon />
                 </IconButton>
-                <Logo black/>
-                <Box sx={{flexGrow: 1, textAlign:'center', pl: 3, pr: 1, display: {xs: 'none', md: 'block'}}}>
-                   <h1>Admin Dashboard</h1> 
+                <Logo black />
+                <Box sx={{ flexGrow: 1, textAlign: 'center', pl: 3, pr: 1, display: { xs: 'none', md: 'block' } }}>
+                    <h1>Admin Dashboard</h1>
                 </Box>
                 <Box sx={{}}>
-                    
+                    <Button color='primary' variant="contained" mr='100' onClick={handleOpen}> Create New Admin Account </Button>
+                    <Modal
+                        open={open}
+                        onClose={handleClos}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                        sx={{ width: { md: '400px', xs: 'calc(100vw - 20px)' }, margin: 'auto', mt: '20px', height: 'calc(100vh - 50px)', overflow: 'auto' }}
+                    >
+                        <CreateAdminForm handleClose={handleClos}/>
+                    </Modal>
                     <IconButton
                         size="large"
                         edge="end"
                         aria-label="account of current user"
                         aria-haspopup="true"
                         color="inherit"
+                        ml='5'
                         onClick={handleMenu}
                     >
-                        <AccountCircle/>
+                        <AccountCircle />
                     </IconButton>
                     <Menu
                         id="menu-appbar"

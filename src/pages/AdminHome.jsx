@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import AdminHeader from "../components/AdminNavbar";
-import UserList from "../components/UserList";
 import {Toolbar} from "@mui/material";
+import VerifyShops from "../components/VerifyShop";
 
 
 export default function AdminHome() {
@@ -9,7 +9,7 @@ export default function AdminHome() {
         <Box component='div'>
             <AdminHeader />
             <Toolbar/>
-            <UserList/>
+            <VerifyShops/>
 
         </Box>
     )
