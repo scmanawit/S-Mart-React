@@ -1,17 +1,28 @@
-import {ReactElement} from 'react'
-import {Toolbar, IconButton, Typography, AppBar, Container, styled, alpha, InputBase, Box, Badge} from '@mui/material'
-import {Menu as MenuIcon} from '@mui/icons-material'
+import {ReactElement, useState} from 'react'
+import {
+    Toolbar,
+    IconButton,
+    Typography,
+    AppBar,
+    Container,
+    styled,
+    alpha,
+    InputBase,
+    Box,
+    Badge,
+    Menu, MenuItem
+} from '@mui/material'
 import Logo from "./Logo";
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-// import MailIcon from '@mui/icons-material/Mail';
-// import NotificationsIcon from '@mui/icons-material/Notifications';
 import CartIcon from '@mui/icons-material/ShoppingCart';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import { useNavigate } from 'react-router-dom';
+import MenuIcon from '@mui/icons-material/Menu';
+import {useNavigate} from 'react-router-dom';
+import {logout} from "../services/authService.js";
+import {getLoggedInUser} from "../services/userService.js";
 
 
-const Search = styled('div')(({ theme }) => ({
+const Search = styled('div')(({theme}) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -27,7 +38,7 @@ const Search = styled('div')(({ theme }) => ({
     },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const SearchIconWrapper = styled('div')(({theme}) => ({
     padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
@@ -37,7 +48,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     justifyContent: 'center',
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+const StyledInputBase = styled(InputBase)(({theme}) => ({
     color: 'inherit',
     '& .MuiInputBase-root': {
         width: '100%',
@@ -50,46 +61,84 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-export default function Header() {
+export default function Header({toggleDrawer}) {
 
     const navigate = useNavigate()
 
-    const routeChange = () =>{ 
-        let path = `/login`; 
-        navigate(path);
-      }
+    const [anchorEl, setAnchorEl] = useState(null);
 
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
 
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const register = () => {
+        setAnchorEl(null);
+        navigate('/auth/register')
+    };
+
+    const login = () => {
+        setAnchorEl(null);
+        navigate('/auth/login')
+    };
+
+    const profile = () => {
+        setAnchorEl(null);
+        navigate('/user/profile')
+    };
+
+    const logoutUser = () => {
+        setAnchorEl(null);
+        logout()
+        navigate('/auth/login')
+    }
 
     return (
         <AppBar
             elevation={0}
-            position='static'
+            position='fixed'
             sx={{
-                width: `100%`
-            }}
+                    width: `100%`,
+                    zIndex: (theme) => theme.zIndex.drawer + 1
+                }}
         >
-            <Toolbar>
-                <Logo black />
-                <Box sx={{ flexGrow: 1, pl: 5, pr: 5 }} >
+            <Toolbar sx={{justifyContent: {xs: 'space-between', md: 'start'}}}>
+                <IconButton
+                    sx={{
+                        display: {xs: 'inline-flex', md: 'none'}
+                    }}
+                    size="large"
+                    edge="end"
+                    aria-label="account of current user"
+                    aria-haspopup="true"
+                    color="inherit"
+                    onClick={toggleDrawer}
+                >
+                    <MenuIcon/>
+                </IconButton>
+                <Logo black/>
+                <Box sx={{flexGrow: 1, pl: 3, pr: 1, display: {xs: 'none', md: 'block'}}}>
                     <Search>
                         <SearchIconWrapper>
-                            <SearchIcon />
+                            <SearchIcon/>
                         </SearchIconWrapper>
                         <StyledInputBase
                             placeholder="Search…"
-                            inputProps={{ 'aria-label': 'search' }}
+                            inputProps={{'aria-label': 'search'}}
                         />
                     </Search>
                 </Box>
-                <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                <Box sx={{}}>
                     <IconButton
                         size="large"
                         aria-label="show 17 new notifications"
                         color="inherit"
                     >
                         <Badge badgeContent={17} color="error">
-                            <CartIcon />
+                            <CartIcon/>
                         </Badge>
                     </IconButton>
                     <IconButton
@@ -98,10 +147,30 @@ export default function Header() {
                         aria-label="account of current user"
                         aria-haspopup="true"
                         color="inherit"
-                        onClick={routeChange}
+                        onClick={handleMenu}
                     >
-                        <AccountCircle />
+                        <AccountCircle/>
                     </IconButton>
+                    <Menu
+                        id="menu-appbar"
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                    >
+                        {!getLoggedInUser() && <MenuItem onClick={login}>Login</MenuItem>}
+                        {!getLoggedInUser() && <MenuItem onClick={register}>Register</MenuItem>}
+                        {getLoggedInUser() && <MenuItem onClick={profile}>Profile</MenuItem>}
+                        {getLoggedInUser() && <MenuItem onClick={logoutUser}>Logout</MenuItem>}
+                    </Menu>
                 </Box>
             </Toolbar>
         </AppBar>

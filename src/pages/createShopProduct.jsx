@@ -12,13 +12,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Logo from "../components/Logo.jsx";
-import { green } from "@mui/material/colors";
+import {green} from "@mui/material/colors";
 import Header from "../components/Header";
 import Footer from "../components/Footer.jsx";
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
+import {useEffect, useState} from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
@@ -40,7 +40,7 @@ export default function AddProduct() {
     const [isActive, setIsActive] = useState(false);
 
     const navigate = useNavigate()
-    let { shopId } = useParams()
+    let {shopId} = useParams()
 
     useEffect(() => {
         if (productName !== "" && description !== "" && price !== "" && categories !== "" && stocks !== "") {
@@ -55,13 +55,15 @@ export default function AddProduct() {
         categories,
         stocks])
 
-    function addProduct({ productName,
-        description,
-        price,
-        categories,
-        stocks }) {
+    function addProduct({
+                            productName,
+                            description,
+                            price,
+                            categories,
+                            stocks
+                        }) {
 
-            console.log('dessss',description);
+        console.log('dessss', description);
 
         axios.post(`http://localhost:4000/product/${shopId}`, {
             productName,
@@ -88,13 +90,13 @@ export default function AddProduct() {
 
 
             }).catch(error => {
-                console.log('DEBUG error', error);
-                Swal.fire({
-                    title: 'Error!',
-                    text: error?.response?.data || ' unsuccessful',
-                    icon: 'error',
-                })
+            console.log('DEBUG error', error);
+            Swal.fire({
+                title: 'Error!',
+                text: error?.response?.data || ' unsuccessful',
+                icon: 'error',
             })
+        })
     }
 
     const handleSubmit = (event) => {
@@ -119,31 +121,30 @@ export default function AddProduct() {
         })
 
 
-
     };
 
     return (
         <Box component='div'>
-            <Header />
-            <Grid container columns={12} sx={{ p: '20px' }}>
+            <Header/>
+            <Grid container columns={12} sx={{p: '20px'}}>
                 <Grid item xs={12} md={6} xsoffset={6}>
-                    <Logo width='50vw' />
+                    <Logo width='50vw'/>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Box component='div' sx={{ p: { md: '80px 20px' }, bgcolor: 'white' }}>
+                    <Box component='div' sx={{p: {md: '80px 20px'}, bgcolor: 'white'}}>
 
-                        <Typography component="h1" variant="h5" sx={{ textAlign: 'center', m: 1 }}>
+                        <Typography component="h1" variant="h5" sx={{textAlign: 'center', m: 1}}>
                             Add Product to Your Shop
                         </Typography>
                         <Box
                             component="form"
                             onSubmit={handleSubmit}
-                            noValidate sx={{ mt: 1, bgcolor: "white", p: '20px', }}
+                            noValidate sx={{mt: 1, bgcolor: "white", p: '20px',}}
                         >
                             <TextField
                                 margin="normal"
                                 required
-                                sx={{ width: '100%' }}
+                                sx={{width: '100%'}}
                                 id="productName"
                                 label="Product Name"
                                 name="productName"
@@ -154,7 +155,7 @@ export default function AddProduct() {
                             <TextField
                                 margin="normal"
                                 required
-                                sx={{ width: '100%' }}
+                                sx={{width: '100%'}}
                                 id="description"
                                 label="description"
                                 name="description"
@@ -165,7 +166,7 @@ export default function AddProduct() {
                             <TextField
                                 margin="normal"
                                 required
-                                sx={{ width: '100%' }}
+                                sx={{width: '100%'}}
                                 id="price"
                                 label="price"
                                 name="price"
@@ -177,7 +178,7 @@ export default function AddProduct() {
                             <TextField
                                 margin="normal"
                                 required
-                                sx={{ width: '100%' }}
+                                sx={{width: '100%'}}
                                 id="categories"
                                 label="categories"
                                 name="categories"
@@ -188,7 +189,7 @@ export default function AddProduct() {
                             <TextField
                                 margin="normal"
                                 required
-                                sx={{ width: '100%' }}
+                                sx={{width: '100%'}}
                                 id="stocks"
                                 label="stocks"
                                 type="number"
@@ -202,17 +203,17 @@ export default function AddProduct() {
                             {
                                 isActive ?
                                     <Button type="submit"
-                                        fullWidth
-                                        variant="contained"
-                                        sx={{ mt: 8, mb: 2 }}>
+                                            fullWidth
+                                            variant="contained"
+                                            sx={{mt: 8, mb: 2}}>
                                         Add Product
                                     </Button>
                                     :
                                     <Button type="submit"
-                                        fullWidth
-                                        variant="contained"
-                                        sx={{ mt: 8, mb: 2 }}
-                                        disabled>
+                                            fullWidth
+                                            variant="contained"
+                                            sx={{mt: 8, mb: 2}}
+                                            disabled>
                                         Add Product
                                     </Button>
                             }
@@ -221,7 +222,7 @@ export default function AddProduct() {
                     </Box>
                 </Grid>
             </Grid>
-            <Footer />
+            <Footer/>
         </Box>
     );
 }

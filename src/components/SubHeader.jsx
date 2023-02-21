@@ -7,7 +7,7 @@ export default function SubHeader(props) {
     return (
         <AppBar
             elevation={0}
-            position='static'
+            position='fixed'
             sx={{
                 width: `100%`,
                 height: '40px',

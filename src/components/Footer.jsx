@@ -1,15 +1,16 @@
-import React, { FC, ReactElement } from "react";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import React from "react";
+import {Box, Container, Grid, Typography} from "@mui/material";
+
 let copyright = String.fromCodePoint(0x00A9);
 
 
-export default function Footer(){
+export default function Footer() {
     return (
         <Box
             sx={{
                 width: "100%",
                 height: "auto",
-                backgroundColor: "primary.main",
+                backgroundColor: "white",
                 paddingTop: "5rem",
                 paddingBottom: "5rem",
             }}

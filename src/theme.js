@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles'
+import {createTheme} from '@mui/material/styles'
 import '@fontsource/public-sans/400.css'
 import '@fontsource/public-sans/600.css'
 import '@fontsource/public-sans/700.css'
@@ -116,6 +116,13 @@ const theme = createTheme({
         },
     },
     components: {
+        MuiToolbar: {
+            styleOverrides: {
+                root: {
+                    height: '70px',
+                },
+            },
+        },
         MuiAppBar: {
             styleOverrides: {
                 root: {
