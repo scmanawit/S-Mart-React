@@ -10,7 +10,6 @@ export default function AdminHome() {
             <AdminHeader />
             <Toolbar/>
             <VerifyShops/>
-
         </Box>
     )
 }

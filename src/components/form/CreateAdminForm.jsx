@@ -43,7 +43,7 @@ export default function CreateAdminForm({ open, handleClose }) {
             handleClose({ created: true })
 
             await Swal.fire({
-                title: "Product Successfully Saved!",
+                title: "Admin User Successfully Saved!",
                 icon: "success"
             })
 
@@ -119,7 +119,7 @@ export default function CreateAdminForm({ open, handleClose }) {
                 <Button type="button"
                     fullWidth
                     variant="contained"
-                    onClick={handleClose}
+                    // onClick={handleClose}
                     sx={{ mt: 1, mb: 2, background: theme => theme.palette.grey['600'] }}
                 >
                     Close
