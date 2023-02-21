@@ -1,4 +1,4 @@
-import {createBrowserRouter} from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import Login from "./pages/login.jsx"
 import Register from "./pages/register";
@@ -9,6 +9,8 @@ import Profile from "./pages/profile";
 import Shop from "./pages/shop.jsx";
 import OrderHistory from "./pages/orderHistory.jsx";
 import Catalog from "./pages/catalog.jsx";
+import AdminHome from "./pages/AdminHome.jsx";
+import AuthenticatedAdminRoute from "./middleware/AuthenticatedAdminRoute.jsx";
 
 
 const router = createBrowserRouter([
@@ -16,7 +18,7 @@ const router = createBrowserRouter([
         path: "/",
         element: (
             <AuthenticatedUserRoute>
-                <App/>
+                <App />
             </AuthenticatedUserRoute>
         ),
         children: [
@@ -26,15 +28,15 @@ const router = createBrowserRouter([
             },
             {
                 path: "user/profile",
-                element: <Profile/>
+                element: <Profile />
             },
             {
                 path: "user/shops",
-                element: <Shop/>
+                element: <Shop />
             },
             {
                 path: "user/orderHistory",
-                element: <OrderHistory/>
+                element: <OrderHistory />
             }
         ]
     },
@@ -42,19 +44,28 @@ const router = createBrowserRouter([
         path: "/auth",
         element: (
             <UnathenticatedUserRoute>
-                <LayoutAuth/>
+                <LayoutAuth />
             </UnathenticatedUserRoute>
         ),
         children: [
             {
                 path: 'login',
-                element: <Login/>
+                element: <Login />
             },
             {
                 path: 'register',
-                element: <Register/>
+                element: <Register />
             },
         ]
+    },
+    {
+        path: "/admin",
+        element: (
+            <AuthenticatedAdminRoute>
+                <AdminHome />
+            </AuthenticatedAdminRoute>
+        ),
+        // children: []
     }
 
 ])
