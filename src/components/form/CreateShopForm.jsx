@@ -29,7 +29,7 @@ export default function CreateShopForm({ open, handleClose }) {
                 shopName: shopName,
                 description: shopDescription,
             })
-            handleClose()
+            handleClose({created: true})
             await Swal.fire({
                 title: "Shop Successfully Created!",
                 icon: "success",

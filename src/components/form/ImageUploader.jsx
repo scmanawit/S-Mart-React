@@ -2,12 +2,13 @@ import React from 'react';
 import ImageUploading from 'react-images-uploading';
 import {Button} from "@mui/material";
 
-export function ImageUploader() {
+export function ImageUploader({ change }) {
     const [images, setImages] = React.useState([]);
     const maxNumber = 69;
 
     const onChange = (imageList) => {
         setImages(imageList)
+        change(imageList)
     };
 
     return (

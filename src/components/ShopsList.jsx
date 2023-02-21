@@ -4,19 +4,31 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
+import { useState } from "react";
+import CreateProductForm from "./form/CreateProductForm";
+import ProductsList from './ProductsList';
 
 export default function ShopsList({ shops }) {
     const [expanded, setExpanded] = React.useState(false);
+    const [selectedShop, setSelectedShop] = React.useState(null);
 
-    const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
+    const [open, setOpen] = useState(false);
+    const handleOpen = (shop) => {
+        setSelectedShop(shop)
+        setOpen(true)
+    };
+    const handleClose = () => setOpen(false);
+
+    const handleChange = (shop) => (event, isExpanded) => {
+        setExpanded(isExpanded ? shop._id : false);
+        setSelectedShop(shop)
     };
 
     const accordion = () => {
         return shops.map(shop => {
             return (
-                <Accordion key={shop._id} expanded={expanded === shop._id} onChange={handleChange(shop._id)}>
+                <Accordion key={shop._id} expanded={expanded === shop._id} onChange={handleChange(shop)}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1bh-content"
@@ -28,11 +40,8 @@ export default function ShopsList({ shops }) {
                         <Typography sx={{ color: 'text.secondary' }}>{shop.description}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-
-                        <Typography>
-                            Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-                            Aliquam eget maximus est, id dignissim quam.
-                        </Typography>
+                        <Button onClick={() => (handleOpen(shop))}>Add product to Shop</Button>
+                        <ProductsList products={shop.products} />
                     </AccordionDetails>
                 </Accordion>
             )
@@ -41,6 +50,7 @@ export default function ShopsList({ shops }) {
 
     return (
         <div>
+            <CreateProductForm shop={selectedShop} open={open} handleClose={handleClose} />
             {accordion()}
         </div>
     );

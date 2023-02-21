@@ -2,7 +2,6 @@ import axios from 'axios'
 
 const client = () => {
     const token = localStorage.getItem('token')
-    console.log('DEBUG: token', token)
     const defaultOptions = {
         baseURL: 'http://localhost:4000',
         headers: {
@@ -12,7 +11,8 @@ const client = () => {
         },
     };
 
+
     return axios.create(defaultOptions);
 };
 
-export default client();
+export default client;

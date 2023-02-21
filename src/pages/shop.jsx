@@ -29,13 +29,24 @@ export default function Shop() {
                 console.log('DEBUG: shops', shops)
                 setShops(shops)
             })
-    }, [shops, open])
+    }, [])
+
+    const closeModal = (data) => {
+        if (data?.created) {
+            getMyShops()
+                .then(shops => {
+                    console.log('DEBUG: shops', shops)
+                    setShops(shops)
+                })
+        }
+        handleClose()
+    }
 
     return (
         <Box component='div' sx={{...context.sx}}>
             <Toolbar />
             <Button onClick={handleOpen}>Create Your Own Shop</Button>
-            <CreateShopForm open={open} handleClose={handleClose} />
+            <CreateShopForm open={open} handleClose={closeModal} />
             <Box component='div' sx={{padding: '20px'}}>
                 <ShopsList shops={shops} />
             </Box>

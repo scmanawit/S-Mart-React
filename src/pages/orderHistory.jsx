@@ -9,33 +9,8 @@ import Paper from '@mui/material/Paper';
 import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getOrderHistory } from '../services/orderService';
-
-const TAX_RATE = 0.07;
-
-function ccyFormat(num) {
-  return `${num.toFixed(2)}`;
-}
-
-function priceRow(qty, unit) {
-  return qty * unit;
-}
-
-function createRow(desc, qty, unit) {
-  const price = priceRow(qty, unit);
-  return { desc, qty, unit, price };
-}
-
-function subtotal(items) {
-  return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
-}
-
-const rows = [
-  createRow('Paperclips (Box)', 100, 1.15),
-  createRow('Paper (Case)', 10, 45.99),
-  createRow('Waste Basket', 2, 17.99),
-];
-
-const invoiceSubtotal = subtotal(rows);
+import { Box } from '@mui/system';
+import { Toolbar } from '@mui/material';
 
 
 export default function OrderHistory() {
@@ -43,71 +18,76 @@ export default function OrderHistory() {
 
   const [orderHistory, setOrderHistory] = useState([]);
 
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState(0)
-  const [qty, setQty] = useState(0)
-  const [subtotal, setSubTotal] = useState(0)
+  useEffect(() => {
+    getOrderHistory()
+      .then(data => {
+        setOrderHistory(data)
+      })
+  }, [])
 
-  
+
+  const products = (history) => {
+    const products = history?.products || []
+    return products.map((product, i) => {
+      return (
+        <TableRow key={i}>
+          <TableCell>{product.product.productName}</TableCell>
+          <TableCell align="right">{product.quantity}</TableCell>
+          <TableCell align="right">{product.product.price}</TableCell>
+          <TableCell align="right">{product.subtotal}</TableCell>
+        </TableRow>
+      )
+    })
+  }
+
+  const history = () => {
+    return orderHistory.map(order => {
+      return (
+        <Box component='div' key={order._id} sx={{ mt: '20px', mb: '20px', pl: '50px', pr: '50px' }}>
+          <TableContainer component={Paper}  >
+            <Table sx={{ minWidth: 700 }} aria-label="spanning table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">
+                    Transaction Date:
+                  </TableCell>
+                  <TableCell align="right" colSpan={3}>{order.transactionDate}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell align="center" colSpan={3} >
+                    Details
+                  </TableCell>
+                  <TableCell align="right">Price</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Product Name</TableCell>
+                  <TableCell align="right">Qty.</TableCell>
+                  <TableCell align="right">Price</TableCell>
+                  <TableCell align="right">Sub Total</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {products(order)}
+                <TableRow>
+                  <TableCell rowSpan={3} />
+                  <TableCell colSpan={2}>Total</TableCell>
+                  <TableCell align="right">{order.total}</TableCell>
+                </TableRow>
 
 
-//   useEffect(() => {
-//     getOrderHistory()
-//         .then(data => {
-//             console.log('DEBUG: OrderH', orderHistory)
-//             setDescription(data.products.product)
-            // setPrice(data.)
-//         })
-// }, [orderHistory])
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      );
+    })
+  }
 
   return (
-    <TableContainer component={Paper} sx={{ ...context.sx }}>
-      <Table sx={{ minWidth: 700 }} aria-label="spanning table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="center" colSpan={3}>
-              Details
-            </TableCell>
-            <TableCell align="right">Price</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell align="left">
-              Transaction Date:
-            </TableCell>
-            <TableCell align="right" colSpan={3}>enter date</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell align="center" colSpan={3} >
-              Details
-            </TableCell>
-            <TableCell align="right">Price</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Desc</TableCell>
-            <TableCell align="right">Qty.</TableCell>
-            <TableCell align="right">Unit</TableCell>
-            <TableCell align="right">Sum</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.desc}>
-              <TableCell>{row.desc}</TableCell>
-              <TableCell align="right">{row.qty}</TableCell>
-              <TableCell align="right">{row.unit}</TableCell>
-              <TableCell align="right">{ccyFormat(row.price)}</TableCell>
-            </TableRow>
-          ))}
+    <Box component='div' sx={{ ...context.sx }}>
+      <Toolbar />
+      {history()}
+    </Box>
+  )
 
-          <TableRow>
-            <TableCell rowSpan={3} />
-            <TableCell colSpan={2}>Total</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
-          </TableRow>
-
-
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
 }

@@ -40,7 +40,7 @@ export default function SideNav({ open, toggle }) {
             text: 'Order History',
             icon: <HistoryIcon />,
             click: function (event) {
-                navigate('/user/order-history')
+                navigate('/user/orderHistory')
             }
         },
         {
