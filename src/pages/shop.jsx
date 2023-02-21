@@ -44,6 +44,7 @@ export default function Shop() {
                     setShops(shops)
                 })
         }
+        setSelectedShop(null)
         setOpenShopForm(false)
     }
 

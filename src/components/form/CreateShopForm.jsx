@@ -3,14 +3,16 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useContext} from "react";
 import Swal from "sweetalert2";
-import {createShop} from "../../services/shopService.js";
+import {createShop, updateShop} from "../../services/shopService.js";
 import {Modal} from "@mui/material";
+import ShopContext from "../../context/ShopContext.jsx";
 
 export default function CreateShopForm({ open, handleClose }) {
-    const [shopName, setShopName] = useState('')
-    const [shopDescription, setShopDescription] = useState('')
+    const { selectedShop } = useContext(ShopContext);
+    const [shopName, setShopName] = useState(selectedShop?.shopName || '')
+    const [shopDescription, setShopDescription] = useState(selectedShop?.description || '')
 
     const [isActive, setIsActive] = useState(false);
 
@@ -22,18 +24,38 @@ export default function CreateShopForm({ open, handleClose }) {
         }
     }, [shopName, shopDescription])
 
+    useEffect(() => {
+        resetForm()
+    }, [selectedShop])
+
+    const resetForm = () => {
+        setShopName(selectedShop?.shopName || '')
+        setShopDescription(selectedShop?.description || '')
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await createShop({
-                shopName: shopName,
-                description: shopDescription,
-            })
+            if (selectedShop) {
+                await updateShop({
+                    shopId: selectedShop._id,
+                    shopName: shopName,
+                    description: shopDescription,
+                })
+            } else {
+                await createShop({
+                    shopName: shopName,
+                    description: shopDescription,
+                })
+            }
+
             handleClose({created: true})
+            resetForm()
+
             await Swal.fire({
-                title: "Shop Successfully Created!",
+                title: "Shop Successfully Saved!",
                 icon: "success",
-                text: "Kindly wait for admin to verify your shop"
+                text: !selectedShop ? "Kindly wait for admin to verify your shop" : ""
             })
 
         } catch (e) {
@@ -57,7 +79,7 @@ export default function CreateShopForm({ open, handleClose }) {
         >
             <Box component='div' sx={{p: '80px 20px', bgcolor: 'white'}}>
                 <Typography component="h1" variant="h5" sx={{textAlign: 'center', m: 1}}>
-                    Create Your Own Shop
+                    Shop
                 </Typography>
                 <Box
                     component="form"
@@ -92,7 +114,7 @@ export default function CreateShopForm({ open, handleClose }) {
                             variant="contained"
                             sx={{mt: 8, mb: 2}}
                             disabled={!isActive}>
-                        Create Shop
+                        Save Shop
                     </Button>
                 </Box>
             </Box>
