@@ -81,19 +81,7 @@ export default function UpdateProfileForm() {
                 onChange={event => setEmail(event.target.value)}
 
             />
-            <TextField
-                margin="normal"
-                required
-                sx={{width: '100%'}}
-                id="address"
-                label="Delivery Address"
-                name="address"
-                type="address"
-                autoComplete="address"
-                value={address}
-                onChange={event => setAddress(event.target.value)}
-
-            />
+           
 
             <PasswordInput
                 id='password'
