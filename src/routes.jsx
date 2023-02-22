@@ -14,6 +14,7 @@ import AuthenticatedAdminRoute from "./middleware/AuthenticatedAdminRoute.jsx";
 import CheckOut from "./pages/CheckOut.jsx";
 import UpdateProfileForm from "./components/form/UpdateProfileForm.jsx";
 import VerifyShops from "./components/VerifyShop.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 
 const router = createBrowserRouter([
@@ -82,6 +83,10 @@ const router = createBrowserRouter([
                 element: <UpdateProfileForm />
             }
         ]
+    },
+    {
+        path: "*",
+        element: <NotFound/>
     }
 
 ])
