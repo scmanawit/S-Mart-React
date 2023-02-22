@@ -125,16 +125,7 @@ export default function Header({toggleDrawer}) {
                     <MenuIcon/>
                 </IconButton>
                 <figure><Logo onClick={home} black/></figure>
-                <Box sx={{flexGrow: 1, pl: 3, pr: 1, display: {xs: 'none', md: 'block'}}}>
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon/>
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{'aria-label': 'search'}}
-                        />
-                    </Search>
+                <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'block'}}}>
                 </Box>
                 <Box sx={{}}>
                     <IconButton

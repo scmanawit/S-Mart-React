@@ -23,6 +23,18 @@ export async function addToCart({ productId, quantity = 1 }) {
     }
 }
 
+export async function changeQuantity({ productId, quantity }) {
+    try {
+        const response = await client().put('/order/changeQuantity/' + productId, {
+            quantity
+        })
+        return response.data
+
+    } catch (e) {
+        throw new Error(e?.response?.data || e?.message || 'Something went wrong!')
+    }
+}
+
 export async function getCart() {
     try {
         const response = await client().get('/cart')

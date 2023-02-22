@@ -7,11 +7,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import { Button, TextField, Toolbar, Typography } from '@mui/material';
+import { Button, IconButton, TextField, Toolbar, Typography } from '@mui/material';
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { clearCart, checkout as userCheckout } from '../services/orderService';
+import { clearCart, checkout as userCheckout, changeQuantity } from '../services/orderService';
 import Swal from 'sweetalert2';
 import { getLoggedInUser } from '../services/userService';
+import { AddCircle, RemoveCircle } from '@mui/icons-material';
 
 const TAX_RATE = 0.07;
 
@@ -21,7 +22,6 @@ export default function CheckOut() {
     const navigate = useNavigate()
 
     const ccyFormat = (num) => {
-        console.log(cart);
         return `${num.toFixed(2)}`;
     }
     const clearUserCart = async () => {
@@ -30,6 +30,37 @@ export default function CheckOut() {
             setCart(newCart)
             await Swal.fire({
                 title: "Cart Successfully cleared!",
+                icon: "success"
+            })
+        } catch (e) {
+            await Swal.fire({
+                title: 'Error!',
+                text: e.message,
+                icon: 'error',
+            })
+        }
+    }
+
+    const updateQuantity = (isAdd, product) => {
+        let currentQuantity = product?.quantity
+        
+        if (isAdd) {
+            ++currentQuantity
+        } 
+
+        if (!isAdd && currentQuantity > 0) {
+            --currentQuantity
+        }
+
+        updateProductToCart({productId: product?.product?._id, quantity: currentQuantity})
+    }
+
+    const updateProductToCart = async ({productId, quantity}) => {
+        try {
+            const order = await changeQuantity({productId, quantity})
+            setCart(order)
+            await Swal.fire({
+                title: "Cart Updated!",
                 icon: "success"
             })
         } catch (e) {
@@ -81,7 +112,15 @@ export default function CheckOut() {
                         <TableRow key={i}>
                             <TableCell><img width='150px' src={product?.product?.image}></img></TableCell>
                             <TableCell>{product?.product?.productName}</TableCell>
-                            <TableCell align="center">{product?.quantity}</TableCell>
+                            <TableCell align="center">
+                                <IconButton color='error' onClick={() => (updateQuantity(false, product))}>
+                                    <RemoveCircle />
+                                </IconButton>
+                                {product?.quantity}
+                                <IconButton color='success' onClick={() => (updateQuantity(true, product))}>
+                                    <AddCircle />
+                                </IconButton>
+                            </TableCell>
                             <TableCell align="center">{product?.product?.price}</TableCell>
                             <TableCell align="center">{ccyFormat(product?.subTotal)}</TableCell>
                         </TableRow>
