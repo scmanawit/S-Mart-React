@@ -66,6 +66,11 @@ export default function Shop() {
         setOpenProductForm(false)
     };
 
+    const openCreate = () => {
+        setSelectedShop(null)
+        setOpenShopForm(true)
+    }
+
     return (
         <ShopContext.Provider value={{
             shops,
@@ -82,7 +87,7 @@ export default function Shop() {
         }}>
             <Box component='div' sx={{ ...context.sx }}>
                 <Toolbar />
-                <Button onClick={() => setOpenShopForm(true)}>Create Your Own Shop</Button>
+                <Button onClick={() => openCreate()}>Create Your Own Shop</Button>
                 <Box component='div' sx={{ padding: '20px' }}>
                     <ShopsList shops={shops} />
                 </Box>

@@ -37,6 +37,7 @@ export default function CreateProductForm({ open, handleClose }) {
     ])
 
     useEffect(() => {
+        console.log('test');
         resetForm()
     }, [selectedProduct])
 

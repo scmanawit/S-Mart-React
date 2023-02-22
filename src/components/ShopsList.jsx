@@ -12,7 +12,7 @@ import { activateShop, deleteShop } from '../services/shopService';
 import Swal from 'sweetalert2';
 
 export default function ShopsList() {
-    const { setSelectedShop, shops, setOpenProductForm, setOpenShopForm, getShops } = useContext(ShopContext);
+    const { setSelectedShop, shops, setOpenProductForm, setOpenShopForm, getShops, setSelectedProduct } = useContext(ShopContext);
 
     const [expanded, setExpanded] = useState(false);
 
@@ -23,6 +23,7 @@ export default function ShopsList() {
 
     const handleOpen = (shop) => {
         setSelectedShop(shop)
+        setSelectedProduct('')
         setOpenProductForm(true)
     };
 

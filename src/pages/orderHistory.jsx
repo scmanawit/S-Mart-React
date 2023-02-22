@@ -31,10 +31,10 @@ export default function OrderHistory() {
     return products.map((product, i) => {
       return (
         <TableRow key={i}>
-          <TableCell>{product.product.productName}</TableCell>
-          <TableCell align="right">{product.quantity}</TableCell>
-          <TableCell align="right">{product.product.price}</TableCell>
-          <TableCell align="right">{product.subTotal}</TableCell>
+          <TableCell>{product?.product?.productName}</TableCell>
+          <TableCell align="right">{product?.quantity}</TableCell>
+          <TableCell align="right">{product?.product?.price}</TableCell>
+          <TableCell align="right">{product?.subTotal}</TableCell>
         </TableRow>
       )
     })

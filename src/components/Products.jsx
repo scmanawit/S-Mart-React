@@ -61,7 +61,7 @@ export default function Products() {
                             srcSet={product.image}
                             alt={product.productName}
                             loading="lazy"
-                            style={{boxShadow: '0 -3px 10px rgb(0 0 0 / 0.2)'}}
+                            style={{boxShadow: '0 -3px 10px rgb(0 0 0 / 0.2)', height: '300px'}}
                         />
                         <Box
                             component='div'
