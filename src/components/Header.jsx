@@ -1,4 +1,4 @@
-import {ReactElement, useState} from 'react'
+import {ReactElement, useContext, useEffect, useState} from 'react'
 import {
     Toolbar,
     IconButton,
@@ -20,7 +20,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import {useNavigate} from 'react-router-dom';
 import {logout} from "../services/authService.js";
 import {getLoggedInUser} from "../services/userService.js";
-
+import CartContext from "../context/CatalogContext.jsx";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -66,6 +66,7 @@ export default function Header({toggleDrawer}) {
     const navigate = useNavigate()
 
     const [anchorEl, setAnchorEl] = useState(null);
+    const {cart} = useContext(CartContext)
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -96,6 +97,10 @@ export default function Header({toggleDrawer}) {
         navigate('/auth/login')
     }
 
+    const home = () => {
+        navigate('/')
+    }
+
     return (
         <AppBar
             elevation={0}
@@ -119,7 +124,7 @@ export default function Header({toggleDrawer}) {
                 >
                     <MenuIcon/>
                 </IconButton>
-                <Logo black/>
+                <figure><Logo onClick={home} black/></figure>
                 <Box sx={{flexGrow: 1, pl: 3, pr: 1, display: {xs: 'none', md: 'block'}}}>
                     <Search>
                         <SearchIconWrapper>
@@ -136,8 +141,9 @@ export default function Header({toggleDrawer}) {
                         size="large"
                         aria-label="show 17 new notifications"
                         color="inherit"
+                        onClick={() => (navigate('/user/checkout'))}
                     >
-                        <Badge badgeContent={17} color="error">
+                        <Badge badgeContent={cart?.products?.length || 0} color="error">
                             <CartIcon/>
                         </Badge>
                     </IconButton>

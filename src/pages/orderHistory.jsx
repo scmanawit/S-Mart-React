@@ -34,7 +34,7 @@ export default function OrderHistory() {
           <TableCell>{product.product.productName}</TableCell>
           <TableCell align="right">{product.quantity}</TableCell>
           <TableCell align="right">{product.product.price}</TableCell>
-          <TableCell align="right">{product.subtotal}</TableCell>
+          <TableCell align="right">{product.subTotal}</TableCell>
         </TableRow>
       )
     })
@@ -43,22 +43,17 @@ export default function OrderHistory() {
   const history = () => {
     return orderHistory.map(order => {
       return (
-        <Box component='div' key={order._id} sx={{ mt: '20px', mb: '20px', pl: '50px', pr: '50px' }}>
-          <TableContainer component={Paper}  >
+        <Box component='div' key={order._id} sx={{ mt: '40px', mb: '20px', pl: '50px', pr: '50px' }}>
+          <TableContainer component={Paper} sx={{ pl: '20' }}>
             <Table sx={{ minWidth: 700 }} aria-label="spanning table">
               <TableHead>
                 <TableRow>
-                  <TableCell align="left">
-                    Transaction Date:
+                  <TableCell align="left"><h1><strong>Transaction Date:</strong></h1>
+
                   </TableCell>
-                  <TableCell align="right" colSpan={3}>{order.transactionDate}</TableCell>
+                  <TableCell align="right" colSpan={3}><h2><strong>{order.transactionDate}</strong></h2></TableCell>
                 </TableRow>
-                <TableRow>
-                  <TableCell align="center" colSpan={3} >
-                    Details
-                  </TableCell>
-                  <TableCell align="right">Price</TableCell>
-                </TableRow>
+
                 <TableRow>
                   <TableCell>Product Name</TableCell>
                   <TableCell align="right">Qty.</TableCell>
@@ -70,7 +65,7 @@ export default function OrderHistory() {
                 {products(order)}
                 <TableRow>
                   <TableCell rowSpan={3} />
-                  <TableCell colSpan={2}>Total</TableCell>
+                  <TableCell colSpan={2}><h3><strong>Total</strong></h3></TableCell>
                   <TableCell align="right">{order.total}</TableCell>
                 </TableRow>
 

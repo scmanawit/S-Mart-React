@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import AdminHeader from "../components/AdminNavbar";
 import {Toolbar} from "@mui/material";
 import VerifyShops from "../components/VerifyShop";
+import { Outlet } from "react-router-dom";
 
 
 export default function AdminHome() {
@@ -9,7 +10,7 @@ export default function AdminHome() {
         <Box component='div'>
             <AdminHeader />
             <Toolbar/>
-            <VerifyShops/>
+            <Outlet/>
         </Box>
     )
 }

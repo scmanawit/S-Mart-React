@@ -1,74 +1,91 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
+import React from 'react';
+import Carousel from 'react-material-ui-carousel'
+import {Box, Button} from '@mui/material'
+import '../carousel.css'
+import {useNavigate} from "react-router-dom";
 
-export default function Carousel() {
-  return (
-    <Box sx={{ width: '100%', height: '500px', overflowY: 'scroll' }}>
-      <ImageList variant="masonry" cols={3} gap={8}>
-        {itemData.map((item) => (
-          <ImageListItem key={item.img}>
-            <img
-              src={`${item.img}?w=248&fit=crop&auto=format`}
-              srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              alt={item.title}
-              loading="lazy"
-            />
-          </ImageListItem>
-        ))}
-      </ImageList>
-    </Box>
-  );
+function Item({ item }) {
+    const navigate = useNavigate()
+    const searchCategory = (category) => {
+        navigate({
+            pathname: '/',
+            search: `?category=${category}`
+        })
+    }
+    return (
+        <Box className='hover-img' component='div' sx={{
+            height: '350px',
+            backgroundImage: `url(${item.image})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+        }}>
+
+            <div className='caption'>
+                <Button
+                    sx={{
+                        background: 'black'
+                    }} size='large' variant="contained"
+                    onClick={() => (searchCategory(item.name))}
+                >
+                    Shop {item.name}
+                </Button>
+            </div>
+        </Box>
+    )
 }
 
-const itemData = [
-  {
-    img: 'https://images.unsplash.com/photo-1549388604-817d15aa0110',
-    title: 'Bed',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1525097487452-6278ff080c31',
-    title: 'Books',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1523413651479-597eb2da0ad6',
-    title: 'Sink',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3',
-    title: 'Kitchen',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1588436706487-9d55d73a39e3',
-    title: 'Blinds',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1574180045827-681f8a1a9622',
-    title: 'Chairs',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1530731141654-5993c3016c77',
-    title: 'Laptop',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1481277542470-605612bd2d61',
-    title: 'Doors',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1517487881594-2787fef5ebf7',
-    title: 'Coffee',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1516455207990-7a41ce80f7ee',
-    title: 'Storage',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1597262975002-c5c3b14bbd62',
-    title: 'Candle',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4',
-    title: 'Coffee table',
-  },
-];
+export default function CustomCarousel() {
+    var items = [
+        {
+            name: "Electronics",
+            image: "/categories/electronics.jpg",
+            path: '/test'
+        },
+        {
+            name: "Clothing, Shoes, and Jewelry",
+            image: "/categories/fashion.jpg",
+            path: '/test'
+        },
+        {
+            name: "Home and Kitchen",
+            image: "/categories/home.jpg",
+            path: '/test'
+        },
+        {
+            name: "Health, Beauty, and Personal Care",
+            image: "/categories/health.jpg",
+            path: '/test'
+        },
+        {
+            name: "Books",
+            image: "/categories/nooks.jpg",
+            path: '/test'
+        },
+        {
+            name: "Pet Supplies",
+            image: "/categories/pet.jpg",
+            path: '/test'
+        },
+        {
+            name: "Grocery & Gourmet Foods",
+            image: "/categories/grocery.jpg",
+            path: '/test'
+        },
+        {
+            name: "Baby Products",
+            image: "/categories/baby.jpg",
+            path: '/test'
+        },
+        {
+            name: "Office Products",
+            image: "/categories/office.jpg",
+            path: '/test'
+        }
+    ]
+
+    return (
+        <Carousel indicators={false}>
+            {items.map((item, i) => <Item key={i} item={item}/>)}
+        </Carousel>
+    )
+}

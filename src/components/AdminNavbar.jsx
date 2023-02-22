@@ -52,7 +52,7 @@ export default function AdminHeader() {
 
     const profile = () => {
         setAnchorEl(null);
-        navigate('/user/profile')
+        navigate('/admin/profile')
     };
 
     const logoutUser = () => {
@@ -108,6 +108,7 @@ export default function AdminHeader() {
                         >
                             {!getLoggedInUser() && <MenuItem onClick={login}>Login</MenuItem>}
                             {!getLoggedInUser() && <MenuItem onClick={register}>Register</MenuItem>}
+                            {getLoggedInUser() && <MenuItem onClick={() => (navigate('/'))}>Home</MenuItem>}
                             {getLoggedInUser() && <MenuItem onClick={profile}>Profile</MenuItem>}
                             {getLoggedInUser() && <MenuItem onClick={logoutUser}>Logout</MenuItem>}
                         </Menu>

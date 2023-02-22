@@ -6,12 +6,13 @@ import {useEffect, useState} from "react";
 import Swal from "sweetalert2";
 import PasswordInput from "../input/PasswordInput.jsx";
 import {Toolbar} from "@mui/material";
-import {getLoggedInUser} from "../../services/userService.js";
+import {getLoggedInUser, updateProfile} from "../../services/userService.js";
 
 export default function UpdateProfileForm() {
     const [user, setUser] = useState(getLoggedInUser())
     const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
+    const [address, setAddress] = useState(user.address || '');
     const [password, setPassword] = useState('');
 
     const [isActive, setIsActive] = useState(false);
@@ -28,18 +29,32 @@ export default function UpdateProfileForm() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        await Swal.fire({
-            title: "Authentication Successful!",
-            icon: "success",
-            text: "Welcome to S-Mart"
-        })
+        try {
+            await updateProfile({
+                email: email ? email : undefined,
+                name: name ? name : undefined,
+                address: address ? address : undefined,
+                password: password ? password : undefined,
+            })
+            await Swal.fire({
+                title: "Authentication Successful!",
+                icon: "success",
+                text: "Welcome to S-Mart"
+            })
+        } catch (e) {
+            await Swal.fire({
+                title: 'Error!',
+                text: e.message,
+                icon: 'error',
+            })
+        }
     };
 
     return (
         <Box
             component="form"
             onSubmit={handleSubmit}
-            noValidate sx={{mt: 1, bgcolor: "white", p: '20px',}}
+            noValidate sx={{mt: 1, bgcolor: "white", p: '20px'}}
         >
             <TextField
                 margin="normal"
@@ -51,7 +66,6 @@ export default function UpdateProfileForm() {
                 autoComplete="name"
                 autoFocus
                 value={name}
-                disabled
                 onChange={event => setName(event.target.value)}
             />
             <TextField
@@ -63,26 +77,37 @@ export default function UpdateProfileForm() {
                 name="email"
                 type="email"
                 autoComplete="email"
-                autoFocus
                 value={email}
-                disabled
                 onChange={event => setEmail(event.target.value)}
 
             />
+            <TextField
+                margin="normal"
+                required
+                sx={{width: '100%'}}
+                id="address"
+                label="Delivery Address"
+                name="address"
+                type="address"
+                autoComplete="address"
+                value={address}
+                onChange={event => setAddress(event.target.value)}
 
-            {/* <PasswordInput
+            />
+
+            <PasswordInput
                 id='password'
                 value={password}
                 onChange={event => setPassword(event.target.value)}
-            /> */}
+            />
 
-            {/* <Button type="submit"
+            <Button type="submit"
                     fullWidth
                     variant="contained"
                     sx={{mt: 8, mb: 2}}
                     disabled={!isActive}>
                 Update Profile
-            </Button> */}
+            </Button>
         </Box>
     )
 }

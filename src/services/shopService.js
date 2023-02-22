@@ -18,6 +18,15 @@ export async function updateShop({ shopId, shopName, description }) {
     }
 }
 
+export async function getShop(shopId) {
+    try {
+        const response = await client().get(`/shop/${shopId}`)
+        return response.data
+    } catch (e) {
+        throw new Error(e?.response?.data || e?.message || 'Something went wrong!')
+    }
+}
+
 export async function getMyShops() {
     try {
         const response = await client().get('/shop/all')

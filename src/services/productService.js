@@ -1,9 +1,13 @@
 import client from "../client"
 
 // get orderHistory
-export async function getAllActiveProducts() {
+export async function getAllActiveProducts(category) {
     try {
-        const response = await client().get('/product/')
+        let url = '/product'
+        if (category) {
+            url = `/product?categories=${category}`
+        }
+        const response = await client().get(url)
         return response.data
 
     } catch (error) {

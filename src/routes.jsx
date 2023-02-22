@@ -11,6 +11,9 @@ import OrderHistory from "./pages/orderHistory.jsx";
 import Catalog from "./pages/catalog.jsx";
 import AdminHome from "./pages/AdminHome.jsx";
 import AuthenticatedAdminRoute from "./middleware/AuthenticatedAdminRoute.jsx";
+import CheckOut from "./pages/CheckOut.jsx";
+import UpdateProfileForm from "./components/form/UpdateProfileForm.jsx";
+import VerifyShops from "./components/VerifyShop.jsx";
 
 
 const router = createBrowserRouter([
@@ -37,6 +40,10 @@ const router = createBrowserRouter([
             {
                 path: "user/orderHistory",
                 element: <OrderHistory />
+            },
+            {
+                path: "user/checkOut",
+                element: <CheckOut/>
             }
         ]
     },
@@ -65,7 +72,16 @@ const router = createBrowserRouter([
                 <AdminHome />
             </AuthenticatedAdminRoute>
         ),
-        // children: []
+        children: [
+            {
+                path: '',
+                element: <VerifyShops/>
+            },
+            {
+                path: 'profile',
+                element: <UpdateProfileForm />
+            }
+        ]
     }
 
 ])

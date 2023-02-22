@@ -1,6 +1,7 @@
 import {Navigate} from "react-router-dom";
 import {Children} from "react";
 import { getLoggedInUser } from "../services/userService";
+import {logout} from "../services/authService.js";
 
 export default function AuthenticatedUserRoute({children}) {
     if (!localStorage.getItem('token')) {
