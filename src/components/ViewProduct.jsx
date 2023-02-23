@@ -57,7 +57,6 @@ export default function ViewProduct({open, handleClose}) {
     const addProductToCart = async (product) => {
         try {
             const order = await addToCart({productId: product._id, quantity})
-            console.log('DEBUG: order', order);
             setCart(order)
             setOpenViewProductModal(false)
             await Swal.fire({

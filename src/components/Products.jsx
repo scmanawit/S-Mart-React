@@ -30,7 +30,6 @@ export default function Products() {
     const addProductToCart = async (product) => {
         try {
             const order = await addToCart({productId: product._id})
-            console.log('DEBUG: order', order);
             setCart(order)
             await Swal.fire({
                 title: "Product Successfully Updated to Cart!",

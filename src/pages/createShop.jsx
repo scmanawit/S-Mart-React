@@ -55,7 +55,6 @@ export default function CreateShop() {
             }
         })
             .then(response => {
-                console.log('DEBUG response', response);
 
                 Swal.fire({
                     title: "Shop Successfully Created!",
@@ -69,7 +68,6 @@ export default function CreateShop() {
 
 
             }).catch(error => {
-            console.log('DEBUG error', error);
             Swal.fire({
                 title: 'Error!',
                 text: error?.response?.data || ' unsuccessful',

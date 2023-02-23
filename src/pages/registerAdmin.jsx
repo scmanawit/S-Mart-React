@@ -76,13 +76,11 @@ export default function RegisterAdmin() {
             email,
             password
         }).then(response => {
-            console.log('DEBUG response', response);
 
             navigate("/")
 
 
         }).catch(error => {
-            console.log('DEBUG error', error);
             Swal.fire({
                 title: 'Error!',
                 text: error?.response?.data || 'Register unsuccessful',
@@ -95,12 +93,7 @@ export default function RegisterAdmin() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            name: data.get('name'),
-            email: data.get('email'),
-            password: data.get('password'),
-
-        });
+        
         if (data.get('password') === data.get('confirmpassword')) {
             register({
                 name: data.get('name'),
