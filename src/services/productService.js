@@ -1,6 +1,6 @@
 import client from "../client"
 
-// get orderHistory
+
 export async function getAllActiveProducts(category) {
     try {
         let url = '/product'
